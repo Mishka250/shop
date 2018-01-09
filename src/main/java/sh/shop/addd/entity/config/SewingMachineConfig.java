@@ -8,6 +8,10 @@ import lombok.*;
 @NoArgsConstructor
 @EqualsAndHashCode
 public class SewingMachineConfig  implements Configuration{
+    private Integer userID;
+    private String name;
+    private Double price;
+    private String type = "machine";
     private String shuffleType;
     private Integer max;
     private Integer min;

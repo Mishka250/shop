@@ -38,7 +38,7 @@
     </nav>
 </div>
 <div class="leftColumn">
-    <div id="slider">
+    <div id="slider" onchange="sendUserFilters()">
         <i>Price</i><br>
         <div id="custom-handle" class="ui-slider-handle"></div>
     </div>
@@ -75,7 +75,7 @@
         // e.preventDefault();
         var handle = $("#custom-handle");
         $("#slider").slider({
-            max: maxPrice,
+            max: maxPrice + maxPrice / (allProductSize * 10),
             min: 0,
             step: maxPrice / (allProductSize * 10),
             create: function () {

@@ -19,7 +19,10 @@ public class ReviewService {
         return reviewRepository.getAllByTypeAndIdProduct(type, id);
     }
     public Review addReview(String username, String body, String type, Integer idProduct) {
-        Review review = new Review();
+        Review review = reviewRepository.findByTypeAndIdProduct(type, idProduct);
+        if(review == null) {
+            review = new Review();
+        }
         review.setIdProduct(idProduct);
         ReviewDetails details = new ReviewDetails();
         details.setBody(body);

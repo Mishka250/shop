@@ -1,6 +1,7 @@
-var info = localStorage.getItem("info");
+var info = $.get("review/" + localStorage.getItem("type") + "/" + localStorage.getItem("productId"));
 
 info = JSON.parse(info)
+console.error(info)
 var reviewsFromInfo = info.reviews;
 var iron = info.iron;
 $("#reviewId").empty();
@@ -8,9 +9,11 @@ $("#mark").empty();
 getAverageMark();
 checkMark();
 for (var i = 0; i < reviewsFromInfo.length; i++) {
+alert("inside loop")
+    console.error(reviewsFromInfo);
 
     $("#reviewId").append(
-        "<div><h4>" + reviewsFromInfo[i].userName + " " + reviewsFromInfo[i].time.dayOfMonth + ":" + reviewsFromInfo[i].time.monthOfYear +
+        "<div><h4>" + reviewsFromInfo[i].user + " " + reviewsFromInfo[i].time.dayOfMonth + ":" + reviewsFromInfo[i].time.monthOfYear +
         ":" + reviewsFromInfo[i].time.year + " at " + reviewsFromInfo[i].time.hourOfDay + ":" + reviewsFromInfo[i].time.minuteOfHour +
         "  wrote: <h5>" + reviewsFromInfo[i].body +
         "</h5></h4></div>"

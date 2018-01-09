@@ -54,25 +54,16 @@ function sendUserFilters() {
     });
     var url = "http://localhost:8080/setFilters/";
 
-    if(localStorage.getItem("typeRequest") === "iron") {
         url += localStorage.getItem("typeRequest") + "/"
-
     console.warn(url)
-    }
     var checked = $("#vapourSelected").is(":checked");
 
     var data = {userID: localStorage.getItem("userID"),
                 name:$("#searchByName").val(),
-                price: price,
-                power: $("#power").val(),
+                price: price === 'undefined' ? -1 : price,
+                power: $("#power").val() === 'undifined' ? -1 : $("#power").val(),
         isVapourSelected:      checked,
         isVapourValue:(checked ? $("#vapourValue").is(":checked") : false) };
-   /* data["userID"] = localStorage.getItem("userID")
-    data["name"] =
-    data["price"] = price;
-    data["power"] =  $("#power").val()
-    data["isVapourSelected"] =  checked
-    data["isVapourValue"] =  (checked ? $("#vapourValue").is(":checked") : false)*/
     console.warn(data);
     $.ajax({
         url: url,
@@ -91,28 +82,35 @@ function sendUserFilters() {
 }
 
 function submitByFilter() {
+    var checked = $("#vapourSelected").is(":checked");
+
+    var data = {userID: localStorage.getItem("userID"),
+        name:$("#searchByName").val(),
+        price: price === 'undefined' ? -1 : price,
+        power: $("#power").val() === 'undifined' ? -1 : $("#power").val(),
+        isVapourSelected:      checked,
+        isVapourValue:(checked ? $("#vapourValue").is(":checked") : false) };
     $.ajax({
-        type: "POST",
+
         url: "/" + localStorage.getItem("typeRequest"),
         contentType: "application/json",
-        data: JSON.stringify({
-                name: $("#searchByName").val(),
-                price: price,
-                power: $("#power").val(),
-                isVapourSelected: $("#vapourSelected").is(":checked"),
-                isVapourValue: $("#vapourSelected").is(":checked") ? $("#vapourValue").is(":checked") : false
-    }),
+        type: "POST",
+        data: JSON.stringify(data),
         success: function (result) {
+            console.error(result)
             $("#tbody").empty();
 
             for (var i = 0; i < result.length; i++) {
+                alert("in result of" + re[i])
                 var message = result[i];
                 $("#tbody").append
                 ("<tr><th>" + (i + 1) +
                     '</th><th><button onclick= "myClick(\'' + message.type + '\',\'' + message.id + '\')">' + message.name +
                     "</button>" +
                     "</th><th>" + message.price +
+                    '</th><th><button id="bucket'+ message.id +'" value="add to bucket" onclick= "addToBucket(\'' + message.type + '\',\'' + message.id + '\')">add to bucket</button>' +
                     "</th></tr>"
+
                 );
 
                 if (message.price > maxPrice) {
@@ -233,10 +231,13 @@ function f(type) {
     if(type ==="iron") {
        addIronFilters()
    }
-   else if(type==='machines') {
+   else if(type==='sewingMachine') {
+        alert("f clicked");
+
+        sendUserFilters()
 
    }else if(type==='furniture') {
-
+        sendUserFilters()
     }
 }
 function addIronFilters() {

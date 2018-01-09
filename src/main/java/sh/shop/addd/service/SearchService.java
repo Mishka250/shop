@@ -45,7 +45,7 @@ public class SearchService {
             ironRepository.findAll().forEach(ironsToReturn::add);
         }
         if(config.getPower()!=null){
-            List<Iron> allByPower = ironRepository.getAllByPower(config.getPower());
+            List<Iron> allByPower = ironRepository.getAllByPowerLessThanEqual(config.getPower());
             ironsToReturn.clear();
             ironsToReturn.addAll(allByPower);
         }

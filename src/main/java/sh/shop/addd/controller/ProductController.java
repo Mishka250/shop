@@ -4,6 +4,7 @@ import com.google.gson.Gson;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
+import redis.clients.jedis.Jedis;
 import sh.shop.addd.dto.IronInfo;
 import sh.shop.addd.dto.ProductDTO;
 import sh.shop.addd.entity.*;
@@ -32,22 +33,57 @@ public class ProductController {
     @Autowired
     private ReviewService reviewService;
 
+    Jedis redis = new Jedis("localhost", 6379);
+
+
+
+    @RequestMapping(value = "/sewingMachine", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
+    public List<ProductDTO> getMachines() {
+        Iterable<SewingMachine> machinesIter= searchService.getMachines();
+        List<SewingMachine> machines = new ArrayList<>();
+        machinesIter.forEach(machines::add);
+
+        return machines.stream().map(sewingMachine -> { ProductDTO machineDTO = new ProductDTO();
+            machineDTO.setId(sewingMachine.getId());
+            machineDTO.setPrice(sewingMachine.getProduct().getPrice());
+            machineDTO.setName(sewingMachine.getProduct().getName());
+            machineDTO.setType("machine");
+            return machineDTO;}).collect(Collectors.toList());
+
+    }
+    @RequestMapping(value = "/furniture", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
+    public List<ProductDTO> getFurniture() {
+        Iterable<Furniture> machinesIter= searchService.getFurnitures();
+        List<Furniture> furnitures = new ArrayList<>();
+        machinesIter.forEach(furnitures::add);
+
+        return furnitures.stream().map(furniture -> {   ProductDTO furnitureDto = new ProductDTO();
+            furnitureDto.setId(furniture.getId());
+            furnitureDto.setPrice(furniture.getProduct().getPrice());
+            furnitureDto.setType(furniture.getType().getType());
+            furnitureDto.setName("furniture");
+            return furnitureDto;}).collect(Collectors.toList());
+
+    }
     @RequestMapping(value = "/iron", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
-    public List<ProductDTO> getIrons( IronConfig config) {
-        Iterable<Iron> ironsIterable = searchService.getIrons(config);
+    public List<ProductDTO> getIrons( @RequestBody String json) {
+        IronConfig  config = jsonParser.fromJson(json,IronConfig.class);
+        Iterable<Iron> ironsIterable = searchService.getIrons();
         List<ProductDTO> productsToReturn = new ArrayList<>();
         List<Iron> ironsList = new ArrayList<>();
         ironsIterable.forEach(ironsList::add);
         List<Iron> collected = ironsList.stream()
                 .filter(iron ->
-                        config.getName()!= null ?
+                        config.getName()!= null && !config.getName().isEmpty() ?
                                 iron.getProduct().getName()
                                         .contains(config.getName()) :
                                 true
-                                        && config.getPrice() != null ?
-                                        iron.getProduct().getPrice() < config.getPrice() :
-                                        true
                 )
+                .filter(iron ->  config.getPrice() != null && config.getPrice()>0?
+                        iron.getProduct().getPrice() < config.getPrice() :
+                        true)
+                .filter(iron -> config.getPower()!=null && config.getPower()>0? iron.getPower()< config.getPower():true)
+                .filter(iron -> config.isVapourSelected() == false? true: iron.getIsVapor().equals(config.isVapourValue()))
                 .collect(Collectors.toList());
 
         collected.forEach(o -> {

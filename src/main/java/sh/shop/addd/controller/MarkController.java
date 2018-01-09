@@ -24,6 +24,9 @@ public class MarkController {
     public Double getMark(@PathVariable String type, @PathVariable Integer id) {
         Mark mark = markRepository.findByIdProductAndType(id, type);
         double res = 0;
+        if(mark == null || mark.getDetails() == null){
+            return res;
+        }
         for (MarkDetails details : mark.getDetails()) {
             res += details.getMark();
         }
