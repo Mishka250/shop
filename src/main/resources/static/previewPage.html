@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+
+    <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+    <link rel="stylesheet" href="/resources/demos/style.css">
+    <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
+    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+    <script>
+        function f(type) {
+            if(localStorage.getItem("typeRequest")== null) {
+                localStorage.setItem("typeRequest",type);
+                currentPage = type;
+                window.location = "main.html";
+            }
+            else {
+                window.location = "main.html";
+            }
+        }
+    </script>
+</head>
+<body>
+
+
+<div class="header">
+    <nav class="navbar navbar-inverse">
+        <div class="container-fluid">
+            <div class="navbar-header">
+                <a class="navbar-brand" href="#">WebSiteName</a>
+            </div>
+            <ul class="nav navbar-nav navbar-right">
+                <li><a href="/logout"><span class="glyphicon glyphicon-log-in"></span> Logout</a></li>
+            </ul>
+        </div>
+    </nav>
+</div>
+
+<div>
+
+    <button onclick="f('iron')">Irons</button>
+    <button onclick="f('sewingMachine')">Sewing Machine</button>
+    <button onclick="f('furniture')">Furniture</button>
+</div>
+</body>
+</html>

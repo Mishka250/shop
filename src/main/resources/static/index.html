@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Welcome</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+
+     <!--jQuery library -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+
+    <!-- Latest compiled JavaScript -->
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <link rel="stylesheet" type="text/css" href = "mainPage.css">
+
+</head>
+<body>
+<div class="container">
+    <div class="row">
+        <h2>Sewing shop</h2>
+    </div>
+</div>
+<br>
+<br>
+<div class="container">
+    <div class="row">
+        <div class="col-md-4 col-md-offset-4">
+            <div class="form-body">
+                <ul class="nav nav-tabs final-login">
+                    <li class="active"><a data-toggle="tab" href="#sectionA">Sign In</a></li>
+                    <li><a data-toggle="tab" href="#sectionB">Join us!</a></li>
+                </ul>
+                <div class="tab-content">
+                    <div id="sectionA" class="tab-pane fade in active">
+                        <div class="innter-form">
+                            <form class="sa-innate-form">
+                                <label>Email Address</label>
+                                <input type="text" name="email" id="loginEmail" required>
+                                <label>Password</label>
+                                <input type="password" name="password" id = "loginPassword" required>
+                                <button id="sendLogin">Sign In</button>
+                            </form>
+                        </div>
+                        <div class="clearfix"></div>
+                    </div>
+                    <div id="sectionB" class="tab-pane fade">
+                        <div class="innter-form">
+                            <form class="sa-innate-form" method="post">
+                                <label>Username</label>
+                                <input id = "usernameId" type="text" name="username"required>
+                                <label>Email Address</label>
+                                <input id = "emailId" type="text" name="email" required>
+                                <label>Password</label>
+                                <input id = "passwordId" type="password" name="password" required>
+                                <label>Phone</label>
+                                <input id = "phoneId" type="text" name="phone" required>
+                                <button type="submit" id="registerButton">Join now</button>
+
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script src="startPage.js"></script>
+
+</body>
+</html>

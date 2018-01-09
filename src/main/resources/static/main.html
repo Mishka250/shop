@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Main</title>
+    <link rel="stylesheet" type="text/css" href="mainPage.css">
+
+    <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+    <link rel="stylesheet" href="/resources/demos/style.css">
+    <style>
+        #custom-handle {
+            width: 3em;
+            height: 1.6em;
+            top: 50%;
+            margin-top: -.8em;
+            text-align: center;
+            line-height: 1.6em;
+            color: black;
+        }
+    </style>
+    <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
+    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+</head>
+<body>
+<div class="header">
+    <nav class="navbar navbar-inverse">
+        <div class="container-fluid">
+            <div class="navbar-header">
+                <a class="navbar-brand" href="#">WebSiteName</a>
+            </div>
+            <ul class="nav navbar-nav navbar-right">
+                <li><a href="/logout"><span class="glyphicon glyphicon-log-in"></span> Logout</a></li>
+            </ul>
+            <button onclick="f('iron')">Irons</button>
+            <button onclick="f('sewingMachine')">Sewing Machine</button>
+            <button onclick="f('furniture')">Furniture</button>
+        </div>
+    </nav>
+</div>
+<div class="leftColumn">
+    <div id="slider">
+        <i>Price</i><br>
+        <div id="custom-handle" class="ui-slider-handle"></div>
+    </div>
+    <script>if(localStorage.getItem("currentType") ==="iron"){
+        addIronFilters()
+    }</script>
+    <div id = "filter"></div>
+</div>
+<div class="centralColumn">
+    <div class="container">
+        <div class="row">
+            <form>
+                <input id="searchByName" type="text" required>
+                <button id="searchByNameSubmit" class="btn btn-info">Search</button>
+            </form>
+        </div>
+    </div>
+
+    <table class="table table-striped">
+        <thead>
+        <tr>
+            <th>Index</th>
+            <th>Name</th>
+            <th>Price</th>
+        </tr>
+        </thead>
+        <tbody id="tbody">
+
+        </tbody>
+    </table>
+</div>
+<script>
+    function slider() {
+        // e.preventDefault();
+        var handle = $("#custom-handle");
+        $("#slider").slider({
+            max: maxPrice,
+            min: 0,
+            step: maxPrice / (allProductSize * 10),
+            create: function () {
+                handle.text($(this).slider("value"));
+                price = 0
+            },
+            slide: function (event, ui) {
+                handle.text(ui.value);
+                price = ui.value
+            }
+        });
+    };
+
+</script>
+<script src="mainPage.js"></script>
+</body>
+</html>

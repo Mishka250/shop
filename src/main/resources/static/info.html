@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Info</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+
+    <!--jQuery library -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+
+    <!-- Latest compiled JavaScript -->
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+</head>
+<body>
+<div class="header">
+    <nav class="navbar navbar-inverse">
+        <div class="container-fluid">
+            <div class="navbar-header">
+                <a class="navbar-brand" href="#">WebSiteName</a>
+            </div>
+            <div class="navbar-header">
+                <a class="navbar-brand" href="main.html">Main page</a>
+            </div>
+            <ul class="nav navbar-nav navbar-right">
+                <li><a href="/logout"><span class="glyphicon glyphicon-log-in"></span> Logout</a></li>
+            </ul>
+        </div>
+
+    </nav>
+</div>
+<div>
+    <div id = "infoId">
+        <h3>Information</h3>
+    </div>
+    <div id = "mark">
+        <h3>Mark</h3>
+    </div>
+    <div id = "markGeneration"></div>
+
+    <div>
+        <h3>Enter review</h3>
+        <input id = "textReview" type="text" required>
+        <button id = "addReview" type="submit" onclick="addReview()">Add review</button>
+    </div>
+    <div id = "reviewId">
+
+    </div>
+</div>
+<script src="info.js"></script>
+</body>
+</html>
