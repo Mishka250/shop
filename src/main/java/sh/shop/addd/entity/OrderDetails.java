@@ -16,6 +16,7 @@ public class OrderDetails {
 
     @Id
     @Column(name = "id_order_details")
+    @GeneratedValue
     private Integer id;
 
     @OneToOne(targetEntity = Product.class)

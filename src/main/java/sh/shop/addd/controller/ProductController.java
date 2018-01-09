@@ -68,6 +68,7 @@ public class ProductController {
     @RequestMapping(value = "/iron", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
     public List<ProductDTO> getIrons( @RequestBody String json) {
         IronConfig  config = jsonParser.fromJson(json,IronConfig.class);
+        redis.set(config.getUserID()+"",json);
         Iterable<Iron> ironsIterable = searchService.getIrons();
         List<ProductDTO> productsToReturn = new ArrayList<>();
         List<Iron> ironsList = new ArrayList<>();
@@ -129,7 +130,7 @@ public class ProductController {
         return productsToReturn;
     }*/
 
-    @RequestMapping(value = "/getAllByName", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
+    /*@RequestMapping(value = "/getAllByName", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
     public List<ProductDTO> getAllByName(String name) {
         Iterable<Iron> irons = searchService.getIrons();
         Iterable<SewingMachine> machines = searchService.getMachines();
@@ -162,10 +163,10 @@ public class ProductController {
         List<ProductDTO> collect = all.stream().filter(productDTO -> productDTO.getName().contains(name)).collect(Collectors.toList());
         return collect;
     }
+*/
 
-
-    @RequestMapping(value = "/iron/{id}", method = RequestMethod.GET,produces = MediaType.APPLICATION_JSON_VALUE)
-    public IronInfo getIronInfo(@PathVariable Integer id, HttpServletRequest request) {
+    @RequestMapping(value = "/iron/{id}/{userId}", method = RequestMethod.GET,produces = MediaType.APPLICATION_JSON_VALUE)
+    public IronInfo getIronInfo(@PathVariable Integer id,@PathVariable Integer userId, HttpServletRequest request) {
         String ip = request.getRemoteAddr();
         System.out.println(ip);
         System.out.println(request.getLocalAddr());
@@ -184,6 +185,8 @@ public class ProductController {
         view.setRef_product(iron.getProduct().getId());
         view.setDate(new Date());
         repository.save(view);
+//        String info1 = redis.set("path" + userId.toString(), "info");
+
         return (info);
     }
 

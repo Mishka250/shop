@@ -20,28 +20,25 @@ public class RedisController {
         configuration1.setPath(redis.get("path"+userID));
         configuration1.setConfiguration(configuration);
         return configuration1;
-    }
- @RequestMapping(value = "/getFilters/sewingMachine/{userID}",method = RequestMethod.GET,produces = MediaType.APPLICATION_JSON_VALUE)
+    } @RequestMapping(value = "/getFilters/sewingMachine/{userID}",method = RequestMethod.GET,produces = MediaType.APPLICATION_JSON_VALUE)
     public FinalConfiguration getMachineFilters(@PathVariable  Integer userID) {
         String fromRedis = redis.get(userID.toString());
-        SewingMachineConfig configuration = jsonParser.fromJson(fromRedis,SewingMachineConfig.class);
+//        IronConfig configuration = jsonParser.fromJson(fromRedis,IronConfig.class);
         FinalConfiguration configuration1 = new FinalConfiguration();
         configuration1.setUserID(userID);
         configuration1.setPath(redis.get("path"+userID));
-        configuration1.setConfiguration(configuration);
+        configuration1.setConfiguration(null);
         return configuration1;
-    }
- @RequestMapping(value = "/getFilters/furniture/{userID}",method = RequestMethod.GET,produces = MediaType.APPLICATION_JSON_VALUE)
-    public FinalConfiguration getFilters(@PathVariable  Integer userID) {
+    } @RequestMapping(value = "/getFilters/furniture/{userID}",method = RequestMethod.GET,produces = MediaType.APPLICATION_JSON_VALUE)
+    public FinalConfiguration getFurnitureFilters(@PathVariable  Integer userID) {
         String fromRedis = redis.get(userID.toString());
-        FurnitureConfig configuration = jsonParser.fromJson(fromRedis,FurnitureConfig.class);
+//        IronConfig configuration = jsonParser.fromJson(fromRedis,IronConfig.class);
         FinalConfiguration configuration1 = new FinalConfiguration();
         configuration1.setUserID(userID);
         configuration1.setPath(redis.get("path"+userID));
-        configuration1.setConfiguration(configuration);
+        configuration1.setConfiguration(null);
         return configuration1;
     }
-
     @RequestMapping(value = "/setFilters/iron", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
     public IronConfig setIronFilters( @RequestBody String json) {
         IronConfig  configuration = jsonParser.fromJson(json,IronConfig.class);

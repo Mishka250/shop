@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 import redis.clients.jedis.Jedis;
 import sh.shop.addd.entity.User;
+import sh.shop.addd.entity.config.Configuration;
 import sh.shop.addd.entity.config.FinalConfiguration;
 import sh.shop.addd.entity.config.IronConfig;
 import sh.shop.addd.service.AuthorizationService;
@@ -31,17 +32,28 @@ public class AuthorizationController {
             return null;
         }
         String fromRedis = redis.get(user.getId().toString());
-        IronConfig configuration = gson.fromJson(fromRedis,IronConfig.class);
+        String path = redis.get("path" + user.getId());
+        Configuration configuration;
+        if (path == null) {
+            configuration = null;
+        } else if (path.toLowerCase().contains("machine")) {
+            configuration = null;
+        } else if (path.toLowerCase().contains("furniture")) {
+            configuration = null;
+        } else {
+            configuration = gson.fromJson(fromRedis, IronConfig.class);
+        }
         FinalConfiguration configuration1 = new FinalConfiguration();
         configuration1.setUserID(user.getId());
-        configuration1.setPath(redis.get("path"+user.getId()));
+        configuration1.setPath(redis.get("path" + user.getId()));
         configuration1.setConfiguration(configuration);
         return configuration1;
     }
 
     @RequestMapping(value = "/logout")
-    public void logout(HttpServletResponse response) throws IOException {
-        response.sendRedirect("/");
+    public boolean logout(HttpServletResponse response) throws IOException {
+//        response.sendRedirect("/");
 //        return idUser;
+        return true;
     }
 }

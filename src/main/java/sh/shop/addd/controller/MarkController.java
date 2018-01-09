@@ -1,13 +1,20 @@
 package sh.shop.addd.controller;
 
+import com.google.gson.Gson;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
+import redis.clients.jedis.Jedis;
+import sh.shop.addd.dto.BucketDTO;
+import sh.shop.addd.dto.BucketEntryDTO;
 import sh.shop.addd.entity.Mark;
 import sh.shop.addd.entity.MarkDetails;
+import sh.shop.addd.entity.Order;
 import sh.shop.addd.repository.MarkRepository;
+import sh.shop.addd.repository.OrderDetailsRepo;
+import sh.shop.addd.repository.OrderRepository;
 import sh.shop.addd.repository.UserRepository;
 
 import java.util.stream.Collectors;
@@ -19,6 +26,11 @@ public class MarkController {
     MarkRepository markRepository;
     @Autowired
     UserRepository userRepository;
+    Jedis jedis = new Jedis("localhost", 6379);
+    Gson gson = new Gson();
+
+    @Autowired
+    OrderRepository orderRepository;
 
     @RequestMapping(value = "/mark/{type}/{id}", method = RequestMethod.GET)
     public Double getMark(@PathVariable String type, @PathVariable Integer id) {
@@ -47,13 +59,16 @@ public class MarkController {
 
     @RequestMapping(value = "/hasMark/{userId}/{productId}/{productType}", method = RequestMethod.GET)
     public boolean hasMark(@PathVariable Integer userId, @PathVariable Integer productId, @PathVariable String productType) {
-        Mark mark = markRepository.findByIdProductAndType(productId,productType);
-        if(mark!=null){
+//        Mark mark = markRepository.findByIdProductAndType(productId,productType);
+        String s = jedis.get("bucketBought" + userId);
+        BucketDTO bucketDTO = gson.fromJson(s, BucketDTO.class);
+        return !bucketDTO.getSet().contains(new BucketEntryDTO(productType, productId));
+      /*  if(mark!=null){
             return mark.getDetails().stream()
                     .filter(markDetails -> markDetails.getIdUser().equals(userId))
                     .collect(Collectors.toList()).size() != 0;
 
-        }
-        return false;
+        }*/
+//        return false;
     }
 }

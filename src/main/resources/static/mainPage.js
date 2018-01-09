@@ -3,12 +3,43 @@ var allProductSize;
 var userID;
 var price;
 var currentPage;
+
 $(document).ready(function () {
     // window.setTimeout(sendUserFilters(),10*1000);
-    getUsersFilters();
+    alert(localStorage.getItem("typeRequest"))
+
+    if(localStorage.getItem("typeRequest") ==="iron"){
+        getUsersFilters();
+
+        addIronFilters()
+        submitByFilter();
+
+    }
+
 
 });
+function getBucket() {
+    $.ajax({
+        url: "/bucket/" + (localStorage.getItem("userID")),
+        type: "GET",
+        success: function (result) {
+            if( result == null || result.set == null) {
+            alert("You need to add something to bucket")
+            }else
+            window.location = "bucket.html"
+        }
+        });
+}
+function logout() {
+    $.ajax({
+        type: "POST",
+        url: "/logout",success: function (b) {
+            localStorage.clear()
+            window.location = "index.html"
 
+        }});
+
+}
 function getUsersFilters() {
     $.ajax({
         url: "/getFilters/" +localStorage.getItem("typeRequest")+"/"+ (localStorage.getItem("userID")),
@@ -18,7 +49,7 @@ function getUsersFilters() {
 
                 if (result.configuration != null) {
                     $("#searchByName").val(result.configuration.name)
-
+                    price = result.configuration.price
                     $("#power").val(result.configuration.power);
                     if (result.configuration.vapourSelected) {
                         $("#vapourSelected").prop('checked', true);
@@ -101,7 +132,6 @@ function submitByFilter() {
             $("#tbody").empty();
 
             for (var i = 0; i < result.length; i++) {
-                alert("in result of" + re[i])
                 var message = result[i];
                 $("#tbody").append
                 ("<tr><th>" + (i + 1) +
@@ -211,7 +241,7 @@ function myClick(type, id) {
     localStorage.setItem("type", type);
     localStorage.setItem("productId", id);
     $.ajax({
-        url:  localStorage.getItem('type') + "/" + localStorage.getItem('productId'),
+        url:  localStorage.getItem('type') + "/" + localStorage.getItem('productId')+"/"+localStorage.getItem("userID"),
         dataType: "json",
         type: "GET",
         success: function (result) {
@@ -232,7 +262,6 @@ function f(type) {
        addIronFilters()
    }
    else if(type==='sewingMachine') {
-        alert("f clicked");
 
         sendUserFilters()
 

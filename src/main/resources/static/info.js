@@ -1,34 +1,49 @@
-var info = $.get("review/" + localStorage.getItem("type") + "/" + localStorage.getItem("productId"));
+$.get( localStorage.getItem("type") + "/"
+    + localStorage.getItem("productId")+"/"+localStorage.getItem("userID"), function (info) {
 
-info = JSON.parse(info)
-console.error(info)
-var reviewsFromInfo = info.reviews;
-var iron = info.iron;
-$("#reviewId").empty();
-$("#mark").empty();
-getAverageMark();
-checkMark();
-for (var i = 0; i < reviewsFromInfo.length; i++) {
-alert("inside loop")
-    console.error(reviewsFromInfo);
+  /*  console.warn(info)
+    info = JSON.parse(info)
+    console.error(info)*/
+    var reviewsFromInfo = info.reviews;
+    var iron = info.iron;
+    $("#reviewId").empty();
+    $("#mark").empty();
+    getAverageMark();
+    checkMark();
+    for (var i = 0; i < reviewsFromInfo.length; i++) {
+        console.error(reviewsFromInfo);
 
-    $("#reviewId").append(
-        "<div><h4>" + reviewsFromInfo[i].user + " " + reviewsFromInfo[i].time.dayOfMonth + ":" + reviewsFromInfo[i].time.monthOfYear +
-        ":" + reviewsFromInfo[i].time.year + " at " + reviewsFromInfo[i].time.hourOfDay + ":" + reviewsFromInfo[i].time.minuteOfHour +
-        "  wrote: <h5>" + reviewsFromInfo[i].body +
-        "</h5></h4></div>"
-    )
+        $("#reviewId").append(
+            "<div><h4>" + reviewsFromInfo[i].user + " " + reviewsFromInfo[i].time.dayOfMonth + ":" + reviewsFromInfo[i].time.monthOfYear +
+            ":" + reviewsFromInfo[i].time.year + " at " + reviewsFromInfo[i].time.hourOfDay + ":" + reviewsFromInfo[i].time.minuteOfHour +
+            "  wrote: <h5>" + reviewsFromInfo[i].body +
+            "</h5></h4></div>"
+        )
+    }
+
+    $("#infoId").append(
+        "<div><h4>Name: " + iron.product.name +
+        "<br>Type: " + iron.ironType.type +
+        "<br>Power: " + iron.power + "w" +
+        "<br>Has vapour: " + iron.isVapor +
+        "<br>Price: " + iron.product.price +
+        "<br>Creator: " + iron.product.creator +
+        "</h4></div>"
+    );
+});
+
+function logout() {
+    $.ajax({
+        type: "POST",
+        url: "/logout",success: function (b) {
+            localStorage.clear()
+            window.location = "index.html"
+
+        }});
+
 }
 
-$("#infoId").append(
-    "<div><h4>Name: " + iron.product.name +
-    "<br>Type: " + iron.ironType.type +
-    "<br>Power: " + iron.power + "w" +
-    "<br>Has vapour: " + iron.isVapor +
-    "<br>Price: " + iron.product.price +
-    "<br>Creator: " + iron.product.creator +
-    "</h4></div>"
-);
+
 function sendMark(mark) {
     $.ajax({
         type: "POST",
